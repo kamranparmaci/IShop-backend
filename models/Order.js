@@ -13,6 +13,11 @@ const OrderSchema = new Schema({
         ref: 'Model',
         required: true,
       },
+      brand: {
+        type: Schema.Types.ObjectId,
+        ref: 'Brand',
+        required: true,
+      },
       quantity: {
         type: Number,
         required: true,
@@ -40,14 +45,17 @@ const OrderSchema = new Schema({
   address: {
     type: String,
     required: true,
+    trim: true,
   },
   zip: {
     type: Number,
     required: true,
+    trim: true,
   },
   phone: {
     type: Number,
     required: true,
+    trim: true,
   },
   status: {
     type: String,

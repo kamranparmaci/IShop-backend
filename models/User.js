@@ -9,6 +9,7 @@ const userSchema = new Schema(
     username: {
       type: String,
       required: true,
+      unique: true,
       minlength: 2,
       maxlength: 50,
     },
@@ -34,16 +35,19 @@ const userSchema = new Schema(
     phone: {
       type: String,
       required: true,
+      trim: true,
     },
     address: {
       type: String,
       required: true,
+      trim: true,
       minlength: 2,
       maxlength: 100,
     },
     zip: {
       type: String,
       required: true,
+      trim: true,
       minlength: 2,
       maxlength: 50,
     },
