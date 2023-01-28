@@ -25,7 +25,7 @@ mongoose
       console.log(`Server is running on port ${port}`);
     })
   )
-  .catch((err) => console.log(`${err} did not connected`));
+  .catch((err) => console.log(`${err} did not connected!`));
 
 // Enable CORS
 app.use(cors());
