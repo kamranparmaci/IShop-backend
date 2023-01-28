@@ -30,6 +30,10 @@ const modelPerfumeSchema = new Schema(
       type: String,
       required: true,
     },
+    scent: {
+      type: String,
+      required: true,
+    },
     reviews: [
       {
         type: Schema.Types.ObjectId,
