@@ -32,30 +32,43 @@ const userSchema = new Schema(
         }
       },
     },
+    avatar: String,
     phone: {
       type: String,
-      required: true,
-      trim: true,
     },
     address: {
       type: String,
-      required: true,
-      trim: true,
       minlength: 2,
       maxlength: 100,
     },
     zip: {
       type: String,
-      required: true,
-      trim: true,
       minlength: 2,
       maxlength: 50,
     },
     role: {
+      type: [String],
+      required: true,
+      enum: ['superadmin', 'admin', 'manager', 'moderator', 'user'],
+      default: 'user',
+    },
+    isActive: {
+      type: Boolean,
+      required: true,
+    },
+    isAdmin: {
+      type: Boolean,
+      required: true,
+    },
+    lastLogin: {
       type: String,
       required: true,
-      enum: ['user', 'admin'],
-      default: 'user',
+    },
+    permissions: {
+      type: [String],
+      required: true,
+      enum: ['view', 'create', 'edit', 'delete', 'none'],
+      default: 'none',
     },
     tokens: [
       {
