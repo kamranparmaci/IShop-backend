@@ -1,5 +1,44 @@
 import User from '../models/User';
 
+export const createSuperadmin = async (req, res) => {
+  try {
+    const { username, email, password } = req.body;
+
+    const checkEmail = await User.findOne({ email });
+    if (checkEmail) {
+      return res
+        .status(400)
+        .json({ success: false, message: 'Email already exists' });
+    }
+
+    const superadmin = new User({
+      username,
+      password,
+      email,
+      role: 'superadmin',
+      avatar: req.file.path,
+      isActive: true,
+      isAdmin: true,
+      permissions: ['view', 'create', 'edit', 'delete'],
+    });
+
+    await superadmin.save();
+
+    const token = superadmin.generateToken();
+
+    return res.status(201).json({
+      success: true,
+      message: 'Superadmin created successfully',
+      data: {
+        superadmin,
+        token,
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
 const createAdmin = async (req, res) => {
   //check if the user is a superadmin
   const user = req.user;
@@ -9,7 +48,7 @@ const createAdmin = async (req, res) => {
     });
   }
 
-  const { username, password, email } = req.body;
+  const { username, password, email, role, permissions } = req.body;
   try {
     //check if the admin already exists
     let admin = await User.findOne({ email });
