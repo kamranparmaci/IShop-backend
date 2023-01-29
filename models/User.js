@@ -16,8 +16,8 @@ const userSchema = new Schema(
     password: {
       type: String,
       required: true,
-      minlength: 6,
-      maxlength: 1024,
+      minlength: 8,
+      maxlength: 50,
       select: false,
     },
     email: {
@@ -58,10 +58,6 @@ const userSchema = new Schema(
     },
     isAdmin: {
       type: Boolean,
-      required: true,
-    },
-    lastLogin: {
-      type: String,
       required: true,
     },
     permissions: {
