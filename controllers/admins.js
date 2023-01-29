@@ -1,4 +1,4 @@
-import User from '../models/User';
+import User from '../models/User.js';
 
 export const createSuperadmin = async (req, res) => {
   try {

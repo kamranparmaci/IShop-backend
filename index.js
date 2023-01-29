@@ -5,7 +5,10 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import helmet from 'helmet';
 import morgan from 'morgan';
-import adminRoutes from './routes/admins.js';
+import { validateCreateSuperadmin } from './middlewares/validations/validateAdmin.js';
+import handleCreateSuperadminErrors from './middlewares/error-handling/errorsAdmin.js';
+import uploadImage from './utils/upload.js';
+import { createSuperadmin } from './controllers/admins.js';
 
 dotenv.config();
 
