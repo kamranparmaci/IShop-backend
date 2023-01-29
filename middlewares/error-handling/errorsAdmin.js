@@ -24,3 +24,5 @@ const handleCreateSuperadminErrors = (err, req, res, next) => {
     .status(500)
     .json({ success: false, errors: [{ message: 'Internal server error' }] });
 };
+
+export default handleCreateSuperadminErrors;

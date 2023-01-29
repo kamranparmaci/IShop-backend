@@ -4,9 +4,8 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import helmet from 'helmet';
-// import compression from 'compression';
 import morgan from 'morgan';
-import multer from 'multer';
+import adminRoutes from './routes/admins.js';
 
 dotenv.config();
 
@@ -43,12 +42,10 @@ app.use(morgan('tiny'));
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'public/assets');
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`);
-  },
-});
-const upload = multer({ storage });
+app.post(
+  '/superadmin/register',
+  validateCreateSuperadmin,
+  handleCreateSuperadminErrors,
+  uploadImage.single('avatar'),
+  createSuperadmin
+);
