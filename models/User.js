@@ -1,6 +1,7 @@
-import { Schema, model } from 'mongoose';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import pkg from "mongoose";
+const { Schema, model } = pkg;
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const SALT_I = 10;
 
@@ -28,7 +29,7 @@ const userSchema = new Schema(
       lowercase: true,
       validate(value) {
         if (!validator.isEmail(value)) {
-          throw new Error('Email is invalid');
+          throw new Error("Email is invalid");
         }
       },
     },
@@ -49,8 +50,8 @@ const userSchema = new Schema(
     role: {
       type: [String],
       required: true,
-      enum: ['superadmin', 'admin', 'manager', 'moderator', 'user'],
-      default: 'user',
+      enum: ["superadmin", "admin", "manager", "moderator", "user"],
+      default: "user",
     },
     isActive: {
       type: Boolean,
@@ -63,8 +64,8 @@ const userSchema = new Schema(
     permissions: {
       type: [String],
       required: true,
-      enum: ['view', 'create', 'edit', 'delete', 'none'],
-      default: 'none',
+      enum: ["view", "create", "edit", "delete", "none"],
+      default: "none",
     },
     tokens: [
       {
@@ -78,8 +79,8 @@ const userSchema = new Schema(
   { timestamp: true }
 );
 
-userSchema.pre('save', async function (next) {
-  if (this.isModified('password')) {
+userSchema.pre("save", async function (next) {
+  if (this.isModified("password")) {
     this.password = await bcrypt.hash(this.password, SALT_I);
   }
   next();
@@ -97,6 +98,6 @@ userSchema.methods.generateAuthToken = async function () {
   return token;
 };
 
-const User = model('User', userSchema);
+const User = model("User", userSchema);
 
 export default User;

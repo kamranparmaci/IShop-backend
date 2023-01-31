@@ -1,21 +1,22 @@
-import { Schema, model } from 'mongoose';
+import pkg from "mongoose";
+const { Schema, model } = pkg;
 
 const OrderSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
-    ref: 'User',
+    ref: "User",
     required: true,
   },
   products: [
     {
       product: {
         type: Schema.Types.ObjectId,
-        ref: 'Model',
+        ref: "Model",
         required: true,
       },
       brand: {
         type: Schema.Types.ObjectId,
-        ref: 'Brand',
+        ref: "Brand",
         required: true,
       },
       quantity: {
@@ -27,7 +28,7 @@ const OrderSchema = new Schema({
         required: true,
         validate(value) {
           if (value < 0) {
-            throw new Error('Price must be a positive number');
+            throw new Error("Price must be a positive number");
           }
         },
       },
@@ -38,7 +39,7 @@ const OrderSchema = new Schema({
     required: true,
     validate(value) {
       if (value < 0) {
-        throw new Error('Total price must be a positive number');
+        throw new Error("Total price must be a positive number");
       }
     },
   },
@@ -59,8 +60,8 @@ const OrderSchema = new Schema({
   },
   status: {
     type: String,
-    default: 'Pending',
-    enum: ['Pending', 'Shipped', 'Delivered', 'Cancelled'],
+    default: "Pending",
+    enum: ["Pending", "Shipped", "Delivered", "Cancelled"],
   },
   paymentMethod: {
     type: String,
@@ -72,6 +73,6 @@ const OrderSchema = new Schema({
   },
 });
 
-const Order = model('Order', OrderSchema);
+const Order = model("Order", OrderSchema);
 
 export default Order;
