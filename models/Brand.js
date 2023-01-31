@@ -1,4 +1,5 @@
-import { Schema, model } from 'mongoose';
+import pkg from "mongoose";
+const { Schema, model } = pkg;
 
 const brandPerfumeSchema = new Schema(
   {
@@ -19,6 +20,6 @@ const brandPerfumeSchema = new Schema(
   { timestamp: true }
 );
 
-const Brand = model('Brand', brandPerfumeSchema);
+const Brand = model("Brand", brandPerfumeSchema);
 
 export default Brand;
