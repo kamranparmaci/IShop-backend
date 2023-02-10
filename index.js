@@ -29,6 +29,8 @@ mongoose
   )
   .catch((err) => console.log(`${err} did not connected!`));
 
+app.use('/', (req, res) => res.send('it is work now'));
+
 // Enable CORS
 app.use(cors());
 
