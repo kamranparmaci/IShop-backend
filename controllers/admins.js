@@ -1,17 +1,17 @@
-import User from '../models/User.js';
+import Admin from '../models/Admin.js';
 
 export const createSuperadmin = async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
-    const checkEmail = await User.findOne({ email });
+    const checkEmail = await Admin.findOne({ email });
     if (checkEmail) {
       return res
         .status(400)
         .json({ success: false, message: 'Email already exists' });
     }
 
-    const superadmin = new User({
+    const superadmin = new Admin({
       username,
       password,
       email,
@@ -51,7 +51,7 @@ const createAdmin = async (req, res) => {
   const { username, password, email, role, permissions } = req.body;
   try {
     //check if the admin already exists
-    let admin = await User.findOne({ email });
+    let admin = await Admin.findOne({ email });
     if (admin) {
       return res.status(400).json({
         error: 'Admin already exists',
@@ -59,15 +59,15 @@ const createAdmin = async (req, res) => {
     }
 
     //create the admin
-    admin = new User({
+    admin = new Admin({
       username,
       password,
       email,
-      role: 'admin',
+      role,
       isActive: true,
       isAdmin: true,
       lastLogin: Date.now(),
-      permissions: ['view', 'create', 'edit', 'delete'],
+      permissions,
     });
 
     await admin.save();
@@ -84,7 +84,7 @@ const createAdmin = async (req, res) => {
 const loginAdmin = async (req, res) => {
   try {
     // Find admin by email
-    const admin = await User.findOne({ email: req.body.email });
+    const admin = await Admin.findOne({ email: req.body.email });
     if (!admin) {
       return res.status(404).json({ error: 'Admin not found' });
     }
@@ -110,7 +110,7 @@ const loginAdmin = async (req, res) => {
 const getAdmin = async (req, res) => {
   try {
     const adminId = req.params.id;
-    const admin = await User.findById(adminId);
+    const admin = await Admin.findById(adminId);
     if (!admin) {
       return res.status(404).json({ message: 'Admin not found' });
     }
@@ -123,7 +123,7 @@ const getAdmin = async (req, res) => {
 
 const getAdmins = async (req, res) => {
   try {
-    const admins = await User.find({
+    const admins = await Admin.find({
       role: { $in: ['admin', 'manager', 'superadmin', 'moderator'] },
     });
     if (req.user.role === 'superadmin') {
@@ -144,10 +144,10 @@ const updateAdmin = async (req, res) => {
   const { username, email, password, role, permissions, isActive, avatar } =
     req.body;
   const adminId = req.params.id;
-  const admin = await User.findById(adminId);
+  const admin = await Admin.findById(adminId);
 
   // Check if admin exists
-  if (!admin) return res.status(404).send('Admin not found');
+  if (!admin) return res.status(404).json({ error: 'Admin not found' });
 
   // Check if admin is a superadmin and has the ability to change role and permissions
   if (req.admin.role === 'superadmin') {
@@ -170,13 +170,13 @@ const updateAdmin = async (req, res) => {
 
 const deleteAdmin = async (id) => {
   // check if the user trying to delete the admin is a superadmin
-  const currentUser = await User.findById(req.user.id);
+  const currentUser = await Admin.findById(req.user.id);
   if (currentUser.role !== 'superadmin') {
     throw new Error('Only superadmins can delete other admins');
   }
 
   // find the admin to be deleted by their id
-  const admin = await User.findById(id);
+  const admin = await Admin.findById(id);
   if (!admin) {
     throw new Error('Admin not found');
   }
