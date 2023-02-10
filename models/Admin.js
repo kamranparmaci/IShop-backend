@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 
 const SALT_I = 10;
 
-const userSchema = new Schema(
+const AdminSchema = new Schema(
   {
     username: {
       type: String,
@@ -34,18 +34,25 @@ const userSchema = new Schema(
       },
     },
     avatar: String,
-    phone: {
-      type: String,
+    role: {
+      type: [String],
+      required: true,
+      enum: ['superadmin', 'admin', 'manager', 'moderator', 'user'],
+      default: 'user',
     },
-    address: {
-      type: String,
-      minlength: 2,
-      maxlength: 100,
+    isActive: {
+      type: Boolean,
+      required: true,
     },
-    zip: {
-      type: String,
-      minlength: 2,
-      maxlength: 50,
+    isAdmin: {
+      type: Boolean,
+      required: true,
+    },
+    permissions: {
+      type: [String],
+      required: true,
+      enum: ['view', 'create', 'edit', 'delete', 'none'],
+      default: 'none',
     },
     tokens: [
       {
@@ -59,18 +66,18 @@ const userSchema = new Schema(
   { timestamp: true }
 );
 
-userSchema.pre('save', async function (next) {
+AdminSchema.pre('save', async function (next) {
   if (this.isModified('password')) {
     this.password = await bcrypt.hash(this.password, SALT_I);
   }
   next();
 });
 
-userSchema.methods.comparePassword = async (candidatePassword) => {
+AdminSchema.methods.comparePassword = async (candidatePassword) => {
   return await bcrypt.compare(candidatePassword, this.password);
 };
 
-userSchema.methods.generateAuthToken = async function () {
+AdminSchema.methods.generateAuthToken = async function () {
   const user = this;
   const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
   user.tokens = user.tokens.concat({ token });
@@ -78,6 +85,6 @@ userSchema.methods.generateAuthToken = async function () {
   return token;
 };
 
-const User = model('User', userSchema);
+const Admin = model('User', AdminSchema);
 
-export default User;
+export default Admin;
