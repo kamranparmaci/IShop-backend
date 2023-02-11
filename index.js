@@ -29,8 +29,6 @@ mongoose
   )
   .catch((err) => console.log(`${err} did not connected!`));
 
-app.use('/', (req, res) => res.send('it is work now'));
-
 // Enable CORS
 app.use(cors());
 
@@ -49,8 +47,6 @@ app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 
 app.post(
   '/superadmin/register',
-  validateCreateSuperadmin,
-  handleCreateSuperadminErrors,
   uploadImage('single', 'avatar'),
   createSuperadmin
 );

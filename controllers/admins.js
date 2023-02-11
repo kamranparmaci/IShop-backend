@@ -24,7 +24,7 @@ export const createSuperadmin = async (req, res) => {
 
     await superadmin.save();
 
-    const token = superadmin.generateToken();
+    const token = superadmin.generateAuthToken();
 
     return res.status(201).json({
       success: true,
@@ -35,7 +35,7 @@ export const createSuperadmin = async (req, res) => {
       },
     });
   } catch (error) {
-    return res.status(500).json({ success: false, message: 'Server error' });
+    return res.status(500).json({ success: false, message: error.message });
   }
 };
 
