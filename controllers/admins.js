@@ -1,6 +1,6 @@
 import Admin from '../models/Admin.js';
 
-export const createSuperadmin = async (req, res) => {
+const createSuperadmin = async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
@@ -107,6 +107,28 @@ const loginAdmin = async (req, res) => {
   }
 };
 
+const checkSuperadmin = async (req, res) => {
+  const superadmin = await Admin.findOne({ role: 'superadmin' });
+  try {
+    if (superadmin) {
+      return res.status(200).json({
+        success: true,
+        data: { superadminExists: true },
+      });
+    } else {
+      return res.status(200).json({
+        success: true,
+        data: { superadminExists: false },
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 const getAdmin = async (req, res) => {
   try {
     const adminId = req.params.id;
@@ -172,7 +194,7 @@ const deleteAdmin = async (id) => {
   // check if the user trying to delete the admin is a superadmin
   const currentUser = await Admin.findById(req.user.id);
   if (currentUser.role !== 'superadmin') {
-    throw new Error('Only superadmins can delete other admins');
+    throw new Error('Only super admins can delete other admins');
   }
 
   // find the admin to be deleted by their id
@@ -201,7 +223,9 @@ const logoutAdmin = async (req, res) => {
 };
 
 export {
+  createSuperadmin,
   createAdmin,
+  checkSuperadmin,
   loginAdmin,
   deleteAdmin,
   getAdmin,
