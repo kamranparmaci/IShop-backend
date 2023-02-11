@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import adminRoutes from './routes/admins.js';
 import { validateCreateSuperadmin } from './middlewares/validations/validateAdmin.js';
 import handleCreateSuperadminErrors from './middlewares/error-handling/errorsAdmin.js';
 import uploadImage from './utils/upload.js';
@@ -50,3 +51,4 @@ app.post(
   uploadImage('single', 'avatar'),
   createSuperadmin
 );
+app.use('/superadmin', adminRoutes);
