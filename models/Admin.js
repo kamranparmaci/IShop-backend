@@ -18,7 +18,7 @@ const AdminSchema = new Schema(
       type: String,
       required: true,
       minlength: 8,
-      maxlength: 50,
+      maxlength: 100,
       select: false,
     },
     email: {
@@ -27,15 +27,10 @@ const AdminSchema = new Schema(
       unique: true,
       trim: true,
       lowercase: true,
-      validate(value) {
-        if (!validator.isEmail(value)) {
-          throw new Error('Email is invalid');
-        }
-      },
     },
     avatar: String,
     role: {
-      type: [String],
+      type: String,
       required: true,
       enum: ['superadmin', 'admin', 'manager', 'moderator', 'user'],
       default: 'user',
@@ -85,6 +80,6 @@ AdminSchema.methods.generateAuthToken = async function () {
   return token;
 };
 
-const Admin = model('User', AdminSchema);
+const Admin = model('Admin', AdminSchema);
 
 export default Admin;
