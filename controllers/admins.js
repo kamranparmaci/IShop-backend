@@ -111,21 +111,12 @@ const checkSuperadmin = async (req, res) => {
   const superadmin = await Admin.findOne({ role: 'superadmin' });
   try {
     if (superadmin) {
-      return res.status(200).json({
-        success: true,
-        data: { superadminExists: true },
-      });
+      return res.status(200).json({ superadminExists: true });
     } else {
-      return res.status(200).json({
-        success: true,
-        data: { superadminExists: false },
-      });
+      return res.status(200).json({ superadminExists: false });
     }
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    return res.status(500).json({ message: error.message });
   }
 };
 
